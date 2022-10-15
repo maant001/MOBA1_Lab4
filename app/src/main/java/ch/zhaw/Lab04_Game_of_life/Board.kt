@@ -8,9 +8,28 @@ class Board constructor(var rows: Int, var columns: Int) {
 
         for (l in 0 until rows) {
             for (m in 0 until columns) {
-                var aliveNeighbours = checkAliveNeighbours(rows, columns) - boardLayout[l][m].state
+
+                // TODO needed?
+                // subtracting
+                //var aliveNeighbours = checkAliveNeighbours(rows, columns) - boardLayout[l][m].state
+
+                var aliveNeighbours = checkAliveNeighbours(rows, columns)
+
+                // Any live cell with fewer than two live neighbours dies, as if by underpopulation.
                 if ((boardLayout[l][m].state == 1) && (aliveNeighbours < 2)) {
-                    
+                    futureGen[l][m].state = 0
+                }
+
+                // Any live cell with more than three live neighbours dies, as if by overpopulation.
+                if ((boardLayout[l][m].state == 1) && (aliveNeighbours > 3)) {
+                    futureGen[l][m].state = 0
+                }
+
+                // Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+                if ((boardLayout[l][m].state == 0) && (aliveNeighbours == 3)) {
+                    futureGen[l][m].state == 1
+                } else {
+                    futureGen[l][m].state = boardLayout[l][m].state
                 }
 
             }
